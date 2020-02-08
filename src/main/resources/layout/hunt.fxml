@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane cache="true" cacheHint="SPEED" focusTraversable="true" prefHeight="267.0" prefWidth="279.0" style="-fx-background-color: #000;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextField alignment="CENTER" layoutX="45.0" layoutY="27.0" prefHeight="27.0" prefWidth="52.0" style="-fx-background-color: #101010; -fx-text-fill: #ccc; -fx-border-color: #737373;" text="0" fx:id="xTextField" />
+      <TextField fx:id="yTextField" alignment="CENTER" layoutX="183.0" layoutY="27.0" prefHeight="27.0" prefWidth="52.0" style="-fx-background-color: #101010; -fx-text-fill: #ccc; -fx-border-color: #737373;" text="0" />
+      <Button fx:id="upButton" layoutX="127.0" layoutY="81.0" mnemonicParsing="false" style="-fx-background-color: grey; -fx-min-width: 25; -fx-min-height: 25;" text="^" />
+      <Button fx:id="leftButton" layoutX="100.0" layoutY="109.0" mnemonicParsing="false" style="-fx-background-color: grey; -fx-min-height: 25; -fx-min-width: 25;" text="&lt;" />
+      <Button fx:id="rightButton" layoutX="154.0" layoutY="109.0" mnemonicParsing="false" style="-fx-background-color: grey; -fx-min-width: 25; -fx-min-height: 25;" text="&gt;" />
+      <Button fx:id="downButton" layoutX="127.0" layoutY="136.0" mnemonicParsing="false" style="-fx-background-color: grey; -fx-min-width: 25; -fx-min-height: 25;" text="v" />
+      <Button fx:id="missingHintButton" layoutX="19.0" layoutY="217.0" mnemonicParsing="false" style="-fx-background-color: #101010; -fx-text-fill: #ccc;" text="Indice Oublié ?" />
+      <ComboBox fx:id="hintComboBox" layoutX="19.0" layoutY="175.0" prefHeight="27.0" prefWidth="240.0" promptText="c" style="-fx-background-color: #2d2d2d; -fx-border-color: #737373; -fx-text-fill: #ccc;" />
+      <Button fx:id="minusXButton" layoutX="11.0" layoutY="28.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: grey; -fx-min-width: 25; -fx-min-height: 25;" text="-" />
+      <Button fx:id="plusXButton" layoutX="106.0" layoutY="28.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: grey; -fx-min-width: 25; -fx-min-height: 25;" text="+" />
+      <Button fx:id="minusYButton" layoutX="150.0" layoutY="28.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: grey; -fx-min-width: 25; -fx-min-height: 25;" text="-" />
+      <Button fx:id="plusYButton" layoutX="243.0" layoutY="28.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: grey; -fx-min-width: 25; -fx-min-height: 25;" text="+" />
+   </children>
+</AnchorPane>

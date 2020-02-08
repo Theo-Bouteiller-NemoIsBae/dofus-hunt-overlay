@@ -1,0 +1,18 @@
+.TextFlied {
+  -fx-background-color: #101010;
+   -fx-text-fill: #ccc;
+    -fx-border-color: #737373;
+}
+
+.Button {
+  -fx-background-color: grey;
+   -fx-min-width: 25;
+    -fx-min-height: 25;
+}
+
+.ComboBox {
+  -fx-background-color: #2d2d2d;
+   -fx-border-color: #737373;
+    -fx-text-fill: #ccc;
+     -fx-item-color: red;
+}
