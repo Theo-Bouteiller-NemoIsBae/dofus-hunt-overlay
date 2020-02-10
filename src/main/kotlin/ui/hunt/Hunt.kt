@@ -1,8 +1,5 @@
 package ui.hunt
 
-import extension.isNumeric
-import javafx.beans.value.ChangeListener
-import javafx.beans.value.ObservableValue
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.geometry.Pos
@@ -20,158 +17,53 @@ import javafx.stage.Stage
 import javafx.stage.StageStyle
 import shared.api.httprequest.Direction
 import shared.api.httprequest.HttpError
-import shared.api.httprequest.HttpRequest
 import shared.api.httprequest.result.Hint
 import shared.api.httprequest.result.ResultHints
 import shared.hint.HintNameResolver
 import shared.hint.Language
 import tornadofx.View
+import tornadofx.onChange
 
 
-class Hunt : View("Dofus Hunt Tracker") {
+class Hunt : View("Dofus Hunt Tracker"), HuntMvc.Listeners {
 
     override val root: AnchorPane by fxml("/layout/hunt.fxml")
 
-    val leftButton: Button by fxid("leftButton")
-    val rightButton: Button by fxid("rightButton")
-    val downButton: Button by fxid("downButton")
-    val upButton: Button by fxid("upButton")
-    val plusXButton: Button by fxid("plusXButton")
-    val minusXButton: Button by fxid("minusXButton")
-    val plusYButton: Button by fxid("plusYButton")
-    val minusYButton: Button by fxid("minusYButton")
-    val missingHintButton: Button by fxid("missingHintButton")
+//    val leftButton: Button by fxid("leftButton")
+//    val rightButton: Button by fxid("rightButton")
+//    val downButton: Button by fxid("downButton")
+//    val upButton: Button by fxid("upButton")
+//    val plusXButton: Button by fxid("plusXButton")
+//    val minusXButton: Button by fxid("minusXButton")
+//    val plusYButton: Button by fxid("plusYButton")
+//    val minusYButton: Button by fxid("minusYButton")
+//    val missingHintButton: Button by fxid("missingHintButton")
 
     val xTextField: TextField by fxid("xTextField")
-    val yTextField: TextField by fxid("yTextField")
+    private val yTextField: TextField by fxid("yTextField")
 
-    val hintComboBox: ComboBox<String> by fxid("hintComboBox")
+    private val hintComboBox: ComboBox<String> by fxid("hintComboBox")
 
+    private val huntMvcImpl: HuntMvcImpl = HuntMvcImpl(this)
 
-    val hintNameResolver: HintNameResolver = HintNameResolver(Language.FRENCH)
-
-    var storeResultHints: ResultHints? = null
+    private val huntViewModel: HuntViewModel = HuntViewModel()
 
     init {
-        primaryStage.isAlwaysOnTop = true
-        primaryStage.icons.add(Image("/img/dofusLogo.png"))
-        primaryStage.isResizable = false
-
-        hintComboBox.isDisable = true
-
-        missingHintButton.isDisable = true
-
-        leftButton.setOnMouseClicked {
-            if (!isInvalid(xTextField.text, yTextField.text)) {
-                hintComboBox.isDisable = true
-                request(xTextField.text.toInt(), yTextField.text.toInt(), Direction.LEFT)
+        huntViewModel.hintCallBack.onChange { hint ->
+            if (null != hint) {
+                huntMvcImpl.onSelectHintAreLoaded(hint)
             }
         }
 
-        rightButton.setOnMouseClicked {
-            if (!isInvalid(xTextField.text, yTextField.text)) {
-                hintComboBox.isDisable = true
-                request(xTextField.text.toInt(), yTextField.text.toInt(), Direction.RIGHT)
+        huntViewModel.hintsCallback.onChange<String> {
+            val items: ObservableList<String> = FXCollections.observableArrayList()
+            it.list.forEach { hint ->
+                items.add(hint)
             }
+            huntMvcImpl.onHintsAreLoaded(items)
         }
-
-        upButton.setOnMouseClicked {
-            if (!isInvalid(xTextField.text, yTextField.text)) {
-                hintComboBox.isDisable = true
-                request(xTextField.text.toInt(), yTextField.text.toInt(), Direction.TOP)
-            }
-        }
-
-        downButton.setOnMouseClicked {
-            if (!isInvalid(xTextField.text, yTextField.text)) {
-                hintComboBox.isDisable = true
-                request(xTextField.text.toInt(), yTextField.text.toInt(), Direction.BOTTOM)
-            }
-        }
-
-        plusXButton.setOnMouseClicked {
-            xTextField.text = (xTextField.text.toInt() + 1).toString()
-        }
-
-        minusXButton.setOnMouseClicked {
-            xTextField.text = (xTextField.text.toInt() - 1).toString()
-        }
-
-        plusYButton.setOnMouseClicked {
-            yTextField.text = (yTextField.text.toInt() + 1).toString()
-        }
-
-        minusYButton.setOnMouseClicked {
-            yTextField.text = (yTextField.text.toInt() - 1).toString()
-        }
-
-
-        xTextField.setOnMouseClicked {
-            xTextField.text = ""
-        }
-
-        yTextField.setOnMouseClicked {
-            yTextField.text = ""
-        }
-
-        hintComboBox.valueProperty().addListener( object : ChangeListener<String?> {
-                override fun changed(p0: ObservableValue<out String?>?, old: String?, new: String?) {
-                    println("new: $new")
-
-                    if (null != new) {
-                        val hintId: Int = hintNameResolver.getIdForName(new) ?: 0
-
-                        if (null != storeResultHints) {
-                            storeResultHints!!.hints.forEach { hint ->
-                                if (hintId == hint.nameId) {
-                                    hintComboBox.isDisable = true
-                                    showResultDialog(hint, storeResultHints!!.from.di)
-                                }
-                            }
-                        }
-                    }
-
-                }
-            }
-        )
     }
 
-    private fun isInvalid(x: String, y: String): Boolean {
-        if (x.isNullOrBlank() || x.isNullOrEmpty()) {
-            return true
-        }
-
-        if (y.isNullOrBlank() || y.isNullOrEmpty()) {
-            return true
-        }
-
-        if (!x.isNumeric() || !y.isNumeric()) {
-            return true
-        }
-
-        return false
-    }
-
-    private fun request(x: Int, y:Int, direction: Direction) {
-        val httpRequest: HttpRequest = HttpRequest()
-
-        httpRequest.getHint(x, y, direction) { httpRequestCallback ->
-            if (null != httpRequestCallback.httpError) {
-                showErrorDialog(httpRequestCallback.httpError)
-            }
-
-            if (null != httpRequestCallback.resultHints) {
-                val items: ObservableList<String> = FXCollections.observableArrayList()
-
-                storeResultHints = httpRequestCallback.resultHints
-                httpRequestCallback.resultHints.hints.forEach { hint ->
-                    items.add(hintNameResolver.getNameForId(hint.nameId))
-                }
-                hintComboBox.items = items
-                hintComboBox.isDisable = false
-            }
-        }
-    }
 
     private fun showErrorDialog(httpError: HttpError) {
 
@@ -215,11 +107,9 @@ class Hunt : View("Dofus Hunt Tracker") {
         errorDialog.y = this.primaryStage.y + ((this.primaryStage.height - errorDialog.height) / 2)
     }
 
-    private fun showResultDialog(hint: Hint, direction: String) {
+    fun showResultDialog(hint: Hint) {
 
         val dialog = Stage()
-
-        dialog.icons.add(Image("/img/dofusLogo.png"))
 
         dialog.initStyle(StageStyle.UNDECORATED)
         dialog.initModality(Modality.APPLICATION_MODAL)
@@ -230,16 +120,20 @@ class Hunt : View("Dofus Hunt Tracker") {
         dialogVbox.alignment = Pos.CENTER
         dialogVbox.style = "-fx-background-color: #000; -fx-border-color: #666666; -fx-border-width: 5;"
 
+        val textHintName: Text = Text(hint.name)
+        textHintName.fill = Color.WHITE
+        textHintName.style = "-fx-background-color: #101010; -fx-text-fill: #ccc; -fx-border-color: #737373;"
+
         val textPosition: Text = Text("${hint.x} ; ${hint.y}")
         textPosition.fill = Color.WHITE
         textPosition.style = "-fx-background-color: #101010; -fx-text-fill: #ccc; -fx-border-color: #737373;"
 
         val textDirection: Text = Text(
-            when (direction) {
-                Direction.TOP.value -> "^"
-                Direction.LEFT.value -> "<"
-                Direction.RIGHT.value -> ">"
-                Direction.BOTTOM.value -> "v"
+            when (hint.direction) {
+                Direction.TOP -> "^"
+                Direction.LEFT -> "<"
+                Direction.RIGHT -> ">"
+                Direction.BOTTOM -> "v"
                 else -> "?"
             }
         )
@@ -255,15 +149,16 @@ class Hunt : View("Dofus Hunt Tracker") {
         button.style = "-fx-background-color: #101010; -fx-text-fill: #ccc;"
         button.setOnMouseClicked {
             dialog.close()
-            buttonPopUpCallBack(hint)
+            huntMvcImpl.onUserDoneHintPopUp(hint)
         }
 
+        dialogVbox.children.add(textHintName)
         dialogVbox.children.add(textPosition)
         dialogVbox.children.add(textDirection)
         dialogVbox.children.add(textDistance)
         dialogVbox.children.add(button)
 
-        val dialogScene = Scene(dialogVbox, this.primaryStage.width - 150, this.primaryStage.height - 150)
+        val dialogScene = Scene(dialogVbox, this.primaryStage.width - 150, this.primaryStage.height - 100)
 
         dialog.scene = dialogScene
         dialog.show()
@@ -271,9 +166,11 @@ class Hunt : View("Dofus Hunt Tracker") {
         dialog.y = this.primaryStage.y + ((this.primaryStage.height - dialog.height) / 2)
     }
 
-    private fun buttonPopUpCallBack(hint: Hint) {
-        hintComboBox.items = null
-        xTextField.text = hint.x.toString()
-        yTextField.text = hint.y.toString()
+    override fun onUserWantToKnowHintResult(x: Int, y: Int, direction: Direction) {
+        huntViewModel.onUserWantToKnowHintResult(x, y, direction)
+    }
+
+    override fun onUserSelectAnHint(hintName: String) {
+        huntViewModel.onUserSelectAnHint(hintName)
     }
 }
