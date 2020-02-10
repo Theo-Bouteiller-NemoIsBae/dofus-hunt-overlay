@@ -106,6 +106,14 @@ class Hunt : View("Dofus Hunt Tracker") {
         }
 
 
+        xTextField.setOnMouseClicked {
+            xTextField.text = ""
+        }
+
+        yTextField.setOnMouseClicked {
+            yTextField.text = ""
+        }
+
         hintComboBox.valueProperty().addListener( object : ChangeListener<String?> {
                 override fun changed(p0: ObservableValue<out String?>?, old: String?, new: String?) {
                     println("new: $new")
