@@ -70,4 +70,104 @@ class HttpRequest {
             }
     }
 
+    fun getVersion(
+        callback: ((HttpRequestCallback) -> (Unit))
+    ) {
+        "http://86.211.99.116:3000/DofusApi/Version".httpGet()
+            .responseString { request, response, result ->
+                when (result) {
+                    is Result.Failure -> {
+                        val ex = result.getException()
+
+                        println(ex.response)
+
+                        when(ex.response.statusCode) {
+                            404 -> {
+                                callback(
+                                    HttpRequestCallback(
+                                        httpError = HttpError(
+                                            statusCode = 404,
+                                            message = "Not found"
+                                        ),
+                                        resultHints = null
+                                    )
+                                )
+                            }
+
+                            else -> {
+                                callback(
+                                    HttpRequestCallback(
+                                        httpError = HttpError(
+                                            statusCode = 0,
+                                            message = "Unknown"
+                                        ),
+                                        resultHints = null
+                                    )
+                                )
+                            }
+                        }
+                    }
+
+                    is Result.Success -> {
+                        callback(
+                            HttpRequestCallback(
+                                httpError = null,
+                                resultHints = result.get()
+                            )
+                        )
+                    }
+                }
+            }
+    }
+
+    fun getHints(
+        callback: ((HttpRequestCallback) -> (Unit))
+    ) {
+        "http://86.211.99.116:3000/DofusApi/all".httpGet()
+            .responseString { request, response, result ->
+                when (result) {
+                    is Result.Failure -> {
+                        val ex = result.getException()
+
+                        println(ex.response)
+
+                        when(ex.response.statusCode) {
+                            404 -> {
+                                callback(
+                                    HttpRequestCallback(
+                                        httpError = HttpError(
+                                            statusCode = 404,
+                                            message = "Not found"
+                                        ),
+                                        resultHints = null
+                                    )
+                                )
+                            }
+
+                            else -> {
+                                callback(
+                                    HttpRequestCallback(
+                                        httpError = HttpError(
+                                            statusCode = 0,
+                                            message = "Unknown"
+                                        ),
+                                        resultHints = null
+                                    )
+                                )
+                            }
+                        }
+                    }
+
+                    is Result.Success -> {
+                        callback(
+                            HttpRequestCallback(
+                                httpError = null,
+                                resultHints = result.get()
+                            )
+                        )
+                    }
+                }
+            }
+    }
+
 }

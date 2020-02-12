@@ -2,6 +2,7 @@ package shared.hint
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import extension.getFileFromResources
 import java.io.*
 
 
@@ -18,7 +19,7 @@ class HintNameResolver (
 
         var jsonString: String = ""
 
-        BufferedReader(InputStreamReader(getFileFromResources("json/hintName.json"))).use { br ->
+        BufferedReader(InputStreamReader(getFileFromResources("json/hintName.json", this))).use { br ->
             var line: String?
             while (br.readLine().also { line = it } != null) {
                 jsonString += line
@@ -57,25 +58,4 @@ class HintNameResolver (
 
         return null
     }
-
-
-    @Throws(IOException::class)
-    private fun printFile(file: File?) {
-        if (file == null) return
-        FileReader(file).use { reader ->
-            BufferedReader(reader).use { br ->
-                var line: String?
-                while (br.readLine().also { line = it } != null) {
-                    println(line)
-                }
-            }
-        }
-    }
-
-
-    private fun getFileFromResources(fileName: String): InputStream? {
-        val classLoader = this::class.java.classLoader
-        return classLoader.getResourceAsStream(fileName) ?: throw IllegalArgumentException("file is not found!")
-    }
-
 }

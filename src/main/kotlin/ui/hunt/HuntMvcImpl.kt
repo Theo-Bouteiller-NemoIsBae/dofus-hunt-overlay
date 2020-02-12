@@ -6,6 +6,7 @@ import javafx.scene.control.Button
 import javafx.scene.control.ComboBox
 import javafx.scene.control.TextField
 import javafx.scene.image.Image
+import javafx.stage.StageStyle
 import shared.api.httprequest.Direction
 import shared.api.httprequest.result.Hint
 
@@ -14,14 +15,11 @@ class HuntMvcImpl(
 ) : HuntMvc {
 
     init {
-        context.primaryStage.isResizable = false
-        context.primaryStage.isAlwaysOnTop = true
-        context.primaryStage.icons.add(Image("/img/dofusLogo.png"))
-
         context.fxid<ComboBox<String>>("hintComboBox").getValue(context, ComboBox<String>::javaClass).let { comboBox ->
             comboBox.isDisable = true
             comboBox.valueProperty().addListener { _, _, new ->
                 if (null != new) {
+                    println("New : $new")
                     context.onUserSelectAnHint(new)
                 }
             }
