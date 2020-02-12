@@ -78,7 +78,7 @@ class SplashScreen: View(), SplashScreenMvc.Listeners {
                     mainStage.icons.add(Image("/img/dofusLogo.png"))
                     primaryStage.hide()
                     mainStage.initStyle(StageStyle.DECORATED);
-                    replaceWith(Hunt(hintsData), sizeToScene = true)
+                    replaceWith(Hunt(hintsData, mainStage), sizeToScene = true)
                     mainStage.show()
                 }
             }
