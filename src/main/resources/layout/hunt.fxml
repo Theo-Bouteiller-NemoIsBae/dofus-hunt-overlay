@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane cache="true" cacheHint="SPEED" focusTraversable="true" prefHeight="267.0" prefWidth="279.0" style="-fx-background-color: #000;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -17,5 +18,10 @@
       <Button fx:id="plusXButton" layoutX="106.0" layoutY="28.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: grey; -fx-min-width: 25; -fx-min-height: 25;" text="+" />
       <Button fx:id="minusYButton" layoutX="150.0" layoutY="28.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: grey; -fx-min-width: 25; -fx-min-height: 25;" text="-" />
       <Button fx:id="plusYButton" layoutX="243.0" layoutY="28.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: grey; -fx-min-width: 25; -fx-min-height: 25;" text="+" />
+      <Label layoutX="87.0" layoutY="249.0" text="Powered by Théo BOUTEILLER &amp; Sébastien ANDREU" textFill="#b5b5b5">
+         <font>
+            <Font size="8.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

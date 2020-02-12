@@ -18,52 +18,37 @@ import javafx.stage.StageStyle
 import shared.api.httprequest.Direction
 import shared.api.httprequest.HttpError
 import shared.api.httprequest.result.Hint
-import shared.api.httprequest.result.ResultHints
-import shared.hint.HintNameResolver
-import shared.hint.Language
+import shared.api.httprequest.result.HintsData
 import tornadofx.View
-import tornadofx.onChange
 
-
-class Hunt : View("Dofus Hunt Tracker"), HuntMvc.Listeners {
+class Hunt(hintsData: HintsData) : View("Dofus Hunt Tracker"), HuntMvc.Listeners {
 
     override val root: AnchorPane by fxml("/layout/hunt.fxml")
-
-//    val leftButton: Button by fxid("leftButton")
-//    val rightButton: Button by fxid("rightButton")
-//    val downButton: Button by fxid("downButton")
-//    val upButton: Button by fxid("upButton")
-//    val plusXButton: Button by fxid("plusXButton")
-//    val minusXButton: Button by fxid("minusXButton")
-//    val plusYButton: Button by fxid("plusYButton")
-//    val minusYButton: Button by fxid("minusYButton")
-//    val missingHintButton: Button by fxid("missingHintButton")
-
-    val xTextField: TextField by fxid("xTextField")
-    private val yTextField: TextField by fxid("yTextField")
-
-    private val hintComboBox: ComboBox<String> by fxid("hintComboBox")
 
     private val huntMvcImpl: HuntMvcImpl = HuntMvcImpl(this)
 
     private val huntViewModel: HuntViewModel = HuntViewModel()
 
     init {
-        huntViewModel.hintCallBack.onChange { hint ->
+
+        huntViewModel.setHuntData(hintsData)
+
+        huntViewModel.hintCallBack.setOnChangeListener { hint ->
             if (null != hint) {
                 huntMvcImpl.onSelectHintAreLoaded(hint)
             }
         }
 
-        huntViewModel.hintsCallback.onChange<String> {
-            val items: ObservableList<String> = FXCollections.observableArrayList()
-            it.list.forEach { hint ->
-                items.add(hint)
+        huntViewModel.hintsCallback.setOnChangeListener {
+            it?.let { hintsData ->
+                val items: ObservableList<String> = FXCollections.observableArrayList()
+                hintsData.forEach { hint ->
+                    items.add(hint)
+                }
+                huntMvcImpl.onHintsAreLoaded(items)
             }
-            huntMvcImpl.onHintsAreLoaded(items)
         }
     }
-
 
     private fun showErrorDialog(httpError: HttpError) {
 
