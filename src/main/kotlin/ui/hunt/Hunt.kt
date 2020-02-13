@@ -21,7 +21,10 @@ import shared.api.httprequest.result.Hint
 import shared.api.httprequest.result.HintsData
 import tornadofx.View
 
-class Hunt(hintsData: HintsData) : View("Dofus Hunt Tracker"), HuntMvc.Listeners {
+class Hunt(
+    hintsData: HintsData,
+    private val mainStage: Stage
+) : View("Dofus Hunt Tracker"), HuntMvc.Listeners {
 
     override val root: AnchorPane by fxml("/layout/hunt.fxml")
 
@@ -99,7 +102,7 @@ class Hunt(hintsData: HintsData) : View("Dofus Hunt Tracker"), HuntMvc.Listeners
         dialog.initStyle(StageStyle.UNDECORATED)
         dialog.initModality(Modality.APPLICATION_MODAL)
 
-        dialog.initOwner(primaryStage)
+        dialog.initOwner(mainStage)
         val dialogVbox = VBox(20.0)
 
         dialogVbox.alignment = Pos.CENTER
@@ -147,8 +150,8 @@ class Hunt(hintsData: HintsData) : View("Dofus Hunt Tracker"), HuntMvc.Listeners
 
         dialog.scene = dialogScene
         dialog.show()
-        dialog.x = this.primaryStage.x + ((this.primaryStage.width - dialog.width) / 2)
-        dialog.y = this.primaryStage.y + ((this.primaryStage.height - dialog.height) / 2)
+        dialog.x = this.mainStage.x + ((this.mainStage.width - dialog.width) / 2)
+        dialog.y = this.mainStage.y + ((this.mainStage.height - dialog.height) / 2)
     }
 
     override fun onUserWantToKnowHintResult(x: Int, y: Int, direction: Direction) {
