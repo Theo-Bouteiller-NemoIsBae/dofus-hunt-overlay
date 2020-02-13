@@ -5,10 +5,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="93.0" prefWidth="273.0" style="-fx-alignment: center; -fx-background-color: #000;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="93.0" prefWidth="273.0" style="-fx-alignment: center; -fx-background-color: #000; -fx-padding: 0px;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label fx:id="label" alignment="CENTER" layoutX="32.0" layoutY="36.0" prefHeight="17.0" prefWidth="209.0" style="-fx-text-fill: #ccc;" text="Initialisation" />
-      <ProgressBar fx:id="progressBar" layoutY="81.0" prefHeight="17.0" prefWidth="273.0" progress="0.0" style="-fx-border-radius: 0px; -fx-accent: #105e25; -fx-background-insets: 0; -fx-padding: 0px; -fx-control-inner-background: #101010; -fx-text-box-border: #101010;" />
+      <ProgressBar fx:id="progressBar" layoutY="81.0" prefHeight="17.0" prefWidth="273.0" progress="0.12" style="-fx-padding: 0px; -fx-shadow-highlight-color: transparent; -fx-background-insets: 0; -fx-accent: #105e25; -fx-box-border: #000; fx-text-box-border: #000; -fx-control-inner-background: #000; -fx-border-image-width: 0px; -fx-background-color: #000; -fx-region-background: #000; -fx-region-border: #000; -fx-text-box-border: #000;" />
       <Label layoutX="84.0" layoutY="67.0" text="Powered by Théo BOUTEILLER &amp; Sébastien ANDREU" textFill="#b5b5b5">
          <font>
             <Font size="8.0" />
