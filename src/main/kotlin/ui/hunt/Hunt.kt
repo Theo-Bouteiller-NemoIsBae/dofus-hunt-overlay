@@ -13,6 +13,7 @@ import tornadofx.View
 
 class Hunt(
     hintsData: HintsData,
+    isOffline: Boolean,
     private val mainStage: Stage
 ) : View("Dofus Hunt Tracker"), HuntMvc.Listeners {
 
@@ -41,6 +42,11 @@ class Hunt(
                 }
                 huntMvcImpl.onHintsAreLoaded(items)
             }
+        }
+
+        when (isOffline) {
+           true -> huntMvcImpl.onAppPastOffline()
+           false -> huntMvcImpl.onAppPastOnline()
         }
     }
 
