@@ -1,5 +1,7 @@
 package shared.api.httprequest
 
+import HOSTNAME
+import PORT
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.result.Result
@@ -14,7 +16,7 @@ class HttpRequest {
         direction: Direction,
         callback: ((HttpRequestCallback) -> (Unit))
     ) {
-        val baseRequest = "http://86.211.99.116:3000/DofusApi/x=${x.toString()}&y=${y.toString()}&di=${direction.value}"
+        val baseRequest = "http://$HOSTNAME:$PORT/DofusApi/x=${x.toString()}&y=${y.toString()}&di=${direction.value}"
 
         baseRequest
             .httpGet()
@@ -73,7 +75,7 @@ class HttpRequest {
     fun getVersion(
         callback: ((HttpRequestCallback) -> (Unit))
     ) {
-        "http://86.211.99.116:3000/DofusApi/Version".httpGet()
+        "http://$HOSTNAME:$PORT/DofusApi/Version".httpGet()
             .responseString { request, response, result ->
                 when (result) {
                     is Result.Failure -> {
@@ -123,7 +125,7 @@ class HttpRequest {
     fun getHints(
         callback: ((HttpRequestCallback) -> (Unit))
     ) {
-        "http://86.211.99.116:3000/DofusApi/all".httpGet()
+        "http://$HOSTNAME:$PORT/DofusApi/all".httpGet()
             .responseString { request, response, result ->
                 when (result) {
                     is Result.Failure -> {
