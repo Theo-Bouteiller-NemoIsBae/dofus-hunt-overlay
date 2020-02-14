@@ -5,10 +5,12 @@ import javafx.scene.image.Image
 import javafx.scene.layout.AnchorPane
 import javafx.stage.Stage
 import javafx.stage.StageStyle
+import shared.dialog.splashscreenapicallfaildialog.SplashScreenApiCallError
+import shared.dialog.splashscreenapicallfaildialog.SplashScreenApiCallFailDialog
 import tornadofx.View
 import ui.hunt.Hunt
+import ui.splashscreen.step.SplashScreenErrorStep
 import ui.splashscreen.step.SplashScreenStep
-import kotlin.concurrent.thread
 
 class SplashScreen: View(), SplashScreenMvc.Listeners {
 
@@ -58,8 +60,29 @@ class SplashScreen: View(), SplashScreenMvc.Listeners {
 
         }
 
-        splashScreenViewModel.hintsDataCallback.setOnChangeListener { hintsData ->
-            if (null != hintsData) {
+        splashScreenViewModel.splashScreenErrorStepObservableCallBack.setOnChangeListener {
+
+            if (null == it) {
+                return@setOnChangeListener
+            }
+
+            when (it) {
+                SplashScreenErrorStep.ERROR_CHECK_UPDATE_BASE_FILE -> {
+                    showDialogErrorDialog(it)
+                }
+
+                SplashScreenErrorStep.ERROR_UPDATE_BASE_FILE -> {
+                    showDialogErrorDialog(it)
+                }
+
+                else -> {
+
+                }
+            }
+        }
+
+        splashScreenViewModel.splashScreenFinishCallBack.setOnChangeListener { splashScreenFinishCallBack ->
+            if (null != splashScreenFinishCallBack) {
                 runAsync { } ui {
                     // initialize your splash stage.
                     Platform.setImplicitExit(false);
@@ -72,10 +95,32 @@ class SplashScreen: View(), SplashScreenMvc.Listeners {
                     mainStage.icons.add(Image("/img/dofusLogo.png"))
                     primaryStage.hide()
                     mainStage.initStyle(StageStyle.DECORATED)
-                    replaceWith(Hunt(hintsData, mainStage), sizeToScene = true)
+                    replaceWith(Hunt(splashScreenFinishCallBack.hintsData, splashScreenFinishCallBack.isOffline, mainStage), sizeToScene = true)
                     mainStage.show()
                 }
             }
         }
+    }
+
+    private fun showDialogErrorDialog(splashScreenErrorStep: SplashScreenErrorStep) {
+        val splashScreenApiCallFailDialog: SplashScreenApiCallFailDialog = SplashScreenApiCallFailDialog(splashScreenErrorStep.message) {
+            when (it) {
+                SplashScreenApiCallError.OFFLINE -> {
+                    splashScreenViewModel.goToOfflineMode()
+                }
+
+                SplashScreenApiCallError.RETRY -> {
+                    when (splashScreenErrorStep) {
+                        SplashScreenErrorStep.ERROR_CHECK_BASE_FILE -> splashScreenViewModel.checkBaseFile()
+                        SplashScreenErrorStep.ERROR_WRITE_BASE_FILE -> splashScreenViewModel.writeBaseFile()
+                        SplashScreenErrorStep.ERROR_CHECK_UPDATE_BASE_FILE -> splashScreenViewModel.checkBaseFile()
+                        SplashScreenErrorStep.ERROR_UPDATE_BASE_FILE -> splashScreenViewModel.updateBaseFile()
+                        SplashScreenErrorStep.ERROR_FINISH -> splashScreenViewModel.finish()
+                    }
+                }
+            }
+        }
+
+        runAsync {  } ui { splashScreenApiCallFailDialog.openModal(stageStyle = StageStyle.UNDECORATED, owner = this.currentWindow) }
     }
 }

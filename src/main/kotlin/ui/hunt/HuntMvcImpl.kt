@@ -124,4 +124,12 @@ class HuntMvcImpl(
         context.fxid<TextField>("xTextField").getValue(context, TextField::javaClass).text = hint.x.toString()
         context.fxid<TextField>("yTextField").getValue(context, TextField::javaClass).text = hint.y.toString()
     }
+
+    override fun onAppPastOffline() {
+        context.fxid<Button>("missingHintButton").getValue(context, Button::javaClass).isDisable = true
+    }
+
+    override fun onAppPastOnline() {
+        context.fxid<Button>("missingHintButton").getValue(context, Button::javaClass).isDisable = false
+    }
 }

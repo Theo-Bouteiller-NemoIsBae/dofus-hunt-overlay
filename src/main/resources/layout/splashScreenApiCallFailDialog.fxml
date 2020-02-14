@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" prefHeight="98.0" prefWidth="282.0" style="-fx-spacing: 10px; -fx-background-color: #000; -fx-border-color: #666666; -fx-border-width: 3px;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+    <Label fx:id="errorLabel" style="-fx-text-fill: #ccc;" text="Label" />
+    <HBox alignment="CENTER" prefHeight="0.0" prefWidth="276.0" style="-fx-spacing: 10px;">
+        <Button fx:id="retryButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="54.0" style="-fx-background-color: #101010; -fx-text-fill: #ccc;" text="Retry" />
+        <Button fx:id="offlineButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="54.0" style="-fx-background-color: #101010; -fx-text-fill: #ccc;" text="Offline" />
+    </HBox>
+
+</VBox>

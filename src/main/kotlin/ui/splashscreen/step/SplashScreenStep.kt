@@ -8,5 +8,5 @@ enum class SplashScreenStep(
     WRITE_BASE_FILE("Création des fichiers", 0.4),
     CHECK_UPDATE_BASE_FILE("Vérification des mises a jour", 0.6),
     UPDATE_BASE_FILE("Mises a jour", 0.8),
-    FINISH("Lancement", 1.0),
+    FINISH("Lancement", 1.0)
 }

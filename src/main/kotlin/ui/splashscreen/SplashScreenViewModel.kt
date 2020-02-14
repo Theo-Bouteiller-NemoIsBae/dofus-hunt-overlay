@@ -9,22 +9,24 @@ import shared.api.httprequest.HttpRequest
 import shared.api.httprequest.result.DataVersion
 import shared.api.httprequest.result.HintsData
 import shared.simpleobservable.SimpleObservable
+import ui.splashscreen.step.SplashScreenErrorStep
 import ui.splashscreen.step.SplashScreenStep
 import java.io.*
 import java.util.concurrent.TimeUnit
 
 class SplashScreenViewModel {
 
-    val splashScreenStepObservableCallBack: SimpleObservable<SplashScreenStep> =
-        SimpleObservable()
-    val hintsDataCallback: SimpleObservable<HintsData> =
-        SimpleObservable()
+    val splashScreenStepObservableCallBack: SimpleObservable<SplashScreenStep> = SimpleObservable()
+    val splashScreenErrorStepObservableCallBack: SimpleObservable<SplashScreenErrorStep> = SimpleObservable()
+    val splashScreenFinishCallBack: SimpleObservable<SplashScreenFinishCallBack> = SimpleObservable()
 
     private var storeApiDataVersion: DataVersion? = null
 
     private var timerDisposable: Disposable? = null
 
     private var storedHintsData: HintsData? = null
+
+    private var isOffline: Boolean = false
 
     fun startSplashScreen() {
         timer(1000) {
@@ -71,7 +73,7 @@ class SplashScreenViewModel {
 
         HttpRequest().getVersion {
             if (null != it.httpError) {
-
+                splashScreenErrorStepObservableCallBack.setValue(SplashScreenErrorStep.ERROR_CHECK_UPDATE_BASE_FILE)
                 return@getVersion
             }
 
@@ -85,15 +87,14 @@ class SplashScreenViewModel {
             }
 
             splashScreenStepObservableCallBack.setValue(SplashScreenStep.FINISH)
+            return@getVersion
         }
     }
 
     fun updateBaseFile() {
-
         HttpRequest().getHints {
-
             if (null != it.httpError) {
-
+                splashScreenErrorStepObservableCallBack.setValue(SplashScreenErrorStep.ERROR_UPDATE_BASE_FILE)
                 return@getHints
             }
 
@@ -109,29 +110,34 @@ class SplashScreenViewModel {
                 splashScreenStepObservableCallBack.setValue(SplashScreenStep.FINISH)
             }
 
-            // error
+            splashScreenErrorStepObservableCallBack.setValue(SplashScreenErrorStep.ERROR_UPDATE_BASE_FILE)
         }
     }
 
     fun finish() {
-        println("finish")
-        if (null == storedHintsData) {
-            val fileInputStream: FileInputStream = FileInputStream(File("hintsData.json"))
-            val inputStreamReader: InputStreamReader = InputStreamReader(fileInputStream)
+        timer(500) {
+            if (null == storedHintsData) {
+                val fileInputStream: FileInputStream = FileInputStream(File("hintsData.json"))
+                val inputStreamReader: InputStreamReader = InputStreamReader(fileInputStream)
 
-            storedHintsData = Gson().fromJson<HintsData>(
-                inputStreamReader,
-                HintsData::class.java
-            )
+                storedHintsData = Gson().fromJson<HintsData>(
+                    inputStreamReader,
+                    HintsData::class.java
+                )
 
-            inputStreamReader.close()
-            fileInputStream.close()
+                inputStreamReader.close()
+                fileInputStream.close()
+            }
+
+            if (null != storedHintsData) {
+                splashScreenFinishCallBack.setValue(SplashScreenFinishCallBack(isOffline, storedHintsData!!))
+            }
         }
+    }
 
-        if (null != storedHintsData) {
-            hintsDataCallback.setValue(storedHintsData!!)
-        }
-
+    fun goToOfflineMode() {
+        isOffline = true
+        splashScreenStepObservableCallBack.setValue(SplashScreenStep.FINISH)
     }
 
     private fun timer(delayInMs: Int, callback: ()->(Unit)) {
