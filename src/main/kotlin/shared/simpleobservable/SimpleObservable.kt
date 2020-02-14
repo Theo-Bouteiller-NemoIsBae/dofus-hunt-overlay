@@ -1,6 +1,4 @@
-package shared.simpleObservable
-
-import ui.splashscreen.step.SplashScreenStep
+package shared.simpleobservable
 
 class SimpleObservable<T> {
     private var value: T? = null

@@ -8,16 +8,17 @@ import io.reactivex.schedulers.Schedulers
 import shared.api.httprequest.HttpRequest
 import shared.api.httprequest.result.DataVersion
 import shared.api.httprequest.result.HintsData
-import shared.simpleObservable.SimpleObservable
-import tornadofx.stringBinding
+import shared.simpleobservable.SimpleObservable
 import ui.splashscreen.step.SplashScreenStep
 import java.io.*
 import java.util.concurrent.TimeUnit
 
 class SplashScreenViewModel {
 
-    val splashScreenStepObservableCallBack: SimpleObservable<SplashScreenStep> = SimpleObservable()
-    val hintsDataCallback: SimpleObservable<HintsData> = SimpleObservable()
+    val splashScreenStepObservableCallBack: SimpleObservable<SplashScreenStep> =
+        SimpleObservable()
+    val hintsDataCallback: SimpleObservable<HintsData> =
+        SimpleObservable()
 
     private var storeApiDataVersion: DataVersion? = null
 
