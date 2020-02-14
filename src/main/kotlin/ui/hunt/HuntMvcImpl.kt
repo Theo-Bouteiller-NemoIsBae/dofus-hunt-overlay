@@ -39,7 +39,7 @@ class HuntMvcImpl(
             makeRequest(Direction.TOP)
         }
 
-        context.fxid<Button>("missingHintButton").getValue(context, Button::javaClass.setOnMouseClicked {
+        context.fxid<Button>("missingHintButton").getValue(context, Button::javaClass).setOnMouseClicked {
 
         }
 
