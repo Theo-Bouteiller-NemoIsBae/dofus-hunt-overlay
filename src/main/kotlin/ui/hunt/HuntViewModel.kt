@@ -1,23 +1,20 @@
 package ui.hunt
 
-import javafx.beans.property.SimpleListProperty
-import javafx.beans.property.SimpleObjectProperty
-import javafx.collections.FXCollections
-import javafx.collections.ObservableList
 import shared.api.httprequest.Direction
-import shared.api.httprequest.HttpRequest
 import shared.api.httprequest.result.Hint
 import shared.api.httprequest.result.HintsData
 
 import shared.api.httprequest.result.ResultHints
 import shared.hint.HintNameResolver
 import shared.hint.Language
-import shared.simpleObservable.SimpleObservable
+import shared.simpleobservable.SimpleObservable
 
 class HuntViewModel {
 
-    val hintCallBack: SimpleObservable<Hint> = SimpleObservable<Hint>()
-    val hintsCallback: SimpleObservable<ArrayList<String>> = SimpleObservable<ArrayList<String>>()
+    val hintCallBack: SimpleObservable<Hint> =
+        SimpleObservable<Hint>()
+    val hintsCallback: SimpleObservable<ArrayList<String>> =
+        SimpleObservable<ArrayList<String>>()
 
     private val hintNameResolver: HintNameResolver = HintNameResolver(Language.FRENCH)
 

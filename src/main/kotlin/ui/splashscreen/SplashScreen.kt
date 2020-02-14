@@ -1,17 +1,11 @@
 package ui.splashscreen
 
 import javafx.application.Platform
-import javafx.concurrent.Task
-import javafx.scene.Scene
 import javafx.scene.image.Image
 import javafx.scene.layout.AnchorPane
-import javafx.scene.layout.VBox
-import javafx.stage.Modality
 import javafx.stage.Stage
 import javafx.stage.StageStyle
-import shared.api.httprequest.result.HintsData
 import tornadofx.View
-import tornadofx.onChange
 import ui.hunt.Hunt
 import ui.splashscreen.step.SplashScreenStep
 import kotlin.concurrent.thread
@@ -77,7 +71,7 @@ class SplashScreen: View(), SplashScreenMvc.Listeners {
                     mainStage.isAlwaysOnTop = true
                     mainStage.icons.add(Image("/img/dofusLogo.png"))
                     primaryStage.hide()
-                    mainStage.initStyle(StageStyle.DECORATED);
+                    mainStage.initStyle(StageStyle.DECORATED)
                     replaceWith(Hunt(hintsData, mainStage), sizeToScene = true)
                     mainStage.show()
                 }

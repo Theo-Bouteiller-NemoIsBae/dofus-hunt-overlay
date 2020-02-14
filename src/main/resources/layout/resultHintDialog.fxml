@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" prefHeight="174.0" prefWidth="255.0" style="-fx-spacing: 10px; -fx-background-color: #000; -fx-border-color: #666666; -fx-border-width: 3px;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="hintLabel" style="-fx-text-fill: #ccc;" text="Banc" />
+      <Label fx:id="positionLabel" layoutX="10.0" layoutY="35.0" style="-fx-text-fill: #ccc;" text="5 ; 5" />
+      <Label fx:id="directionLabel" layoutX="10.0" layoutY="52.0" style="-fx-text-fill: #ccc;" text="&lt;" />
+      <Label fx:id="distanceLabel" layoutX="10.0" layoutY="52.0" style="-fx-text-fill: #ccc;" text="3" />
+      <Button fx:id="doneButton" mnemonicParsing="false" style="-fx-background-color: #101010; -fx-text-fill: #ccc;" text="Done" />
+   </children>
+</VBox>

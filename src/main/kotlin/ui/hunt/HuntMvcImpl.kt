@@ -5,8 +5,6 @@ import javafx.collections.ObservableList
 import javafx.scene.control.Button
 import javafx.scene.control.ComboBox
 import javafx.scene.control.TextField
-import javafx.scene.image.Image
-import javafx.stage.StageStyle
 import shared.api.httprequest.Direction
 import shared.api.httprequest.result.Hint
 
@@ -119,7 +117,6 @@ class HuntMvcImpl(
     override fun onSelectHintAreLoaded(hint: Hint) {
         println("hint : n: ${hint.nameId} d: ${hint.d} x: ${hint.x} y: ${hint.y} name: ${hint.name} direction: ${hint.direction?.value}")
         context.fxid<ComboBox<String>>("hintComboBox").getValue(context, ComboBox<String>::javaClass).isDisable = true
-        context.showResultDialog(hint)
     }
 
     override fun onUserDoneHintPopUp(hint: Hint) {
