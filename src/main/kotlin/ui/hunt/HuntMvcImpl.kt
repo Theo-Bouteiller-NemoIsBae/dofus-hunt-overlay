@@ -39,13 +39,8 @@ class HuntMvcImpl(
             makeRequest(Direction.TOP)
         }
 
-        context.fxid<Button>("missingHintButton").getValue(context, Button::javaClass).let { button ->
+        context.fxid<Button>("missingHintButton").getValue(context, Button::javaClass.setOnMouseClicked {
 
-            button.isDisable = true
-
-            button.setOnMouseClicked {
-
-            }
         }
 
         context.fxid<TextField>("xTextField").getValue(context, TextField::javaClass).let { xTextField ->
@@ -130,6 +125,6 @@ class HuntMvcImpl(
     }
 
     override fun onAppPastOnline() {
-        context.fxid<Button>("missingHintButton").getValue(context, Button::javaClass).isDisable = false
+//         context.fxid<Button>("missingHintButton").getValue(context, Button::javaClass).isDisable = false
     }
 }
