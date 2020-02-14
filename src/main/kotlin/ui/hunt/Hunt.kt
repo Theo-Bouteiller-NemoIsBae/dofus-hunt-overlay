@@ -10,6 +10,7 @@ import shared.api.httprequest.result.Hint
 import shared.api.httprequest.result.HintsData
 import shared.dialog.ResultHintDialog
 import tornadofx.View
+import kotlin.system.exitProcess
 
 class Hunt(
     hintsData: HintsData,
@@ -26,6 +27,10 @@ class Hunt(
     init {
 
         huntViewModel.setHuntData(hintsData)
+
+        mainStage.setOnCloseRequest {
+            exitProcess(0)
+        }
 
         huntViewModel.hintCallBack.setOnChangeListener { hint ->
             if (null != hint) {

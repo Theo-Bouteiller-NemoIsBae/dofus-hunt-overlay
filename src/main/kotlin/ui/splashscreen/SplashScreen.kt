@@ -11,6 +11,7 @@ import tornadofx.View
 import ui.hunt.Hunt
 import ui.splashscreen.step.SplashScreenErrorStep
 import ui.splashscreen.step.SplashScreenStep
+import kotlin.system.exitProcess
 
 class SplashScreen: View(), SplashScreenMvc.Listeners {
 
@@ -27,6 +28,9 @@ class SplashScreen: View(), SplashScreenMvc.Listeners {
             splashScreenViewModel.startSplashScreen()
         }
 
+        primaryStage.setOnCloseRequest {
+            exitProcess(0)
+        }
 
         splashScreenViewModel.splashScreenStepObservableCallBack.setOnChangeListener { splashScreenStep ->
             println("Update : ${splashScreenStep?.message}")
