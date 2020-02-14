@@ -19,16 +19,18 @@ class HintNameResolver (
 
         var jsonString: String = ""
 
-        BufferedReader(InputStreamReader(getFileFromResources("json/hintName.json", this))).use { br ->
-            var line: String?
-            while (br.readLine().also { line = it } != null) {
-                jsonString += line
-            }
+        val inputStream: InputStream? = getFileFromResources("json/hintName.json", this)
+
+        if (null != inputStream) {
+            val inputStreamReader: InputStreamReader = InputStreamReader(inputStream)
+
+            map = gson.fromJson(inputStreamReader, mapType)
+
+            inputStreamReader.close()
+            inputStream.close()
         }
 
-
-        map = gson.fromJson(jsonString, mapType)
-
+        // error
     }
 
     fun getNameForId(id: Int): String? {

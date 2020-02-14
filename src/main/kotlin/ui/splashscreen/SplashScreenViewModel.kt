@@ -46,14 +46,27 @@ class SplashScreenViewModel {
     }
 
     fun writeBaseFile() {
-        val fileWriter: FileWriter = FileWriter("hintsData.json")
+        val inputStream: InputStream? = getFileFromResources("json/defaultHints.json", this)
+
+        if (null == inputStream) {
+            // error
+            return
+        }
+
+        val inputStreamReader: InputStreamReader = InputStreamReader(inputStream!!)
         val hintData: HintsData = Gson().fromJson<HintsData>(
-            InputStreamReader(getFileFromResources("json/defaultHints.json", this)),
-            HintsData::class.java
+            inputStreamReader, HintsData::class.java
         )
+        val fileWriter: FileWriter = FileWriter("hintsData.json")
+
         fileWriter.write(Gson().toJson(hintData))
         fileWriter.flush()
         fileWriter.close()
+
+        inputStreamReader.close()
+        inputStream.close()
+
+
         splashScreenStepObservableCallBack.setValue(SplashScreenStep.CHECK_UPDATE_BASE_FILE)
     }
 
