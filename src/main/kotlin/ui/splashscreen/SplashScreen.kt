@@ -5,13 +5,18 @@ import javafx.scene.image.Image
 import javafx.scene.layout.AnchorPane
 import javafx.stage.Stage
 import javafx.stage.StageStyle
+import net.sourceforge.tess4j.Tesseract
+import net.sourceforge.tess4j.TesseractException
 import shared.dialog.splashscreenapicallfaildialog.SplashScreenApiCallError
 import shared.dialog.splashscreenapicallfaildialog.SplashScreenApiCallFailDialog
 import tornadofx.View
 import ui.hunt.Hunt
+import ui.setup.Setup
 import ui.splashscreen.step.SplashScreenErrorStep
 import ui.splashscreen.step.SplashScreenStep
+import java.io.File
 import kotlin.system.exitProcess
+
 
 class SplashScreen: View(), SplashScreenMvc.Listeners {
 
@@ -21,6 +26,8 @@ class SplashScreen: View(), SplashScreenMvc.Listeners {
     private val splashScreenViewModel: SplashScreenViewModel = SplashScreenViewModel()
 
     init {
+
+        test()
 
         primaryStage.initStyle(StageStyle.UNDECORATED)
 
@@ -98,8 +105,9 @@ class SplashScreen: View(), SplashScreenMvc.Listeners {
                     mainStage.isAlwaysOnTop = true
                     mainStage.icons.add(Image("/img/dofusLogo.png"))
                     primaryStage.hide()
-                    mainStage.initStyle(StageStyle.DECORATED)
-                    replaceWith(Hunt(splashScreenFinishCallBack.hintsData, splashScreenFinishCallBack.isOffline, mainStage), sizeToScene = true)
+                    mainStage.initStyle(StageStyle.TRANSPARENT)
+//                    replaceWith(Hunt(splashScreenFinishCallBack.hintsData, splashScreenFinishCallBack.isOffline, mainStage), sizeToScene = true)
+                    replaceWith(Setup(mainStage), sizeToScene = true)
                     mainStage.show()
                 }
             }
@@ -126,5 +134,20 @@ class SplashScreen: View(), SplashScreenMvc.Listeners {
         }
 
         runAsync {  } ui { splashScreenApiCallFailDialog.openModal(stageStyle = StageStyle.UNDECORATED, owner = this.currentWindow) }
+    }
+
+    private fun test() {
+        val imageFile = File(this.javaClass.getResource("/img/onlyPosScreen.PNG").toURI())
+        val instance = Tesseract()
+
+        instance.setDatapath(File(this.javaClass.getResource("/tessdata").toURI()).path)
+        instance.setTessVariable("user_defined_dpi", "270")
+
+        try {
+            val result = instance.doOCR(imageFile)
+            println(result)
+        } catch (e: TesseractException) {
+            System.err.println(e.message)
+        }
     }
 }

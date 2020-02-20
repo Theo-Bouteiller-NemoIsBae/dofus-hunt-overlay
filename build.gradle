@@ -29,6 +29,10 @@ dependencies {
     implementation 'com.github.kittinunf.fuel:fuel:2.0.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    // https://mvnrepository.com/artifact/net.sourceforge.tess4j/tess4j
+    compile group: 'net.sourceforge.tess4j', name: 'tess4j', version: '4.5.1'
+
 }
 
 compileKotlin {
